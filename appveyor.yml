@@ -81,6 +81,9 @@ after_build:
   - cd %WORK_DIR%
   - 7z a llvm_one.zip build/NinjaMinGW/llvm/lib/*.a
 
+test_script:
+  - 'echo test_script'
+  
 artifacts:
   - path: llvm_one.zip
     name: LLVM ONE
