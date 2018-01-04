@@ -69,7 +69,7 @@ build_script:
   #- cp -p libcmark.dll.a libcmark.a
   #- cp -p libcmark.a %WORK_DIR%/swift/libcmark.a
   
-  # Build clang
+  # Build clang (part 1)
   - c:/msys64/usr/bin/mkdir -p %WORK_DIR%/build/NinjaMinGW/llvm
   - cd %WORK_DIR%/build/NinjaMinGW/llvm
   - cmake -G Ninja -D CMAKE_BUILD_TYPE=RELEASE -DCMAKE_C_COMPILER=clang  -DCMAKE_CXX_COMPILER=clang++ -DLLVM_ENABLE_ASSERTIONS:BOOL=TRUE %WORK_DIR%/llvm
@@ -78,12 +78,15 @@ build_script:
   #- ninja lib/libLLVMLanaiCodeGen.a lib/libLLVMLanaiDesc.a lib/libLLVMLanaiDisassembler.a lib/libLLVMLanaiInfo.a lib/libLLVMLanaiInstPrinter.a lib/libLLVMLinker.a lib/libLLVMLTO.a lib/libLLVMMC.a lib/libLLVMMCDisassembler.a lib/libLLVMMCJIT.a lib/libLLVMMCParser.a lib/libLLVMMipsAsmParser.a lib/libLLVMMipsAsmPrinter.a lib/libLLVMMipsCodeGen.a lib/libLLVMMipsDesc.a lib/libLLVMMipsDisassembler.a lib/libLLVMMipsInfo.a lib/libLLVMMSP430AsmPrinter.a lib/libLLVMMSP430CodeGen.a lib/libLLVMMSP430Desc.a lib/libLLVMMSP430Info.a lib/libLLVMNVPTXAsmPrinter.a lib/libLLVMNVPTXCodeGen.a lib/libLLVMNVPTXDesc.a lib/libLLVMNVPTXInfo.a lib/libLLVMObjCARCOpts.a lib/libLLVMObject.a lib/libLLVMOption.a lib/libLLVMPasses.a lib/libLLVMPowerPCAsmParser.a lib/libLLVMPowerPCAsmPrinter.a lib/libLLVMPowerPCCodeGen.a lib/libLLVMPowerPCDesc.a lib/libLLVMPowerPCDisassembler.a lib/libLLVMPowerPCInfo.a lib/libLLVMProfileData.a lib/libLLVMRISCVCodeGen.a lib/libLLVMRISCVDesc.a lib/libLLVMRISCVInfo.a lib/libLLVMRuntimeDyld.a lib/libLLVMScalarOpts.a lib/libLLVMSelectionDAG.a lib/libLLVMSparcAsmParser.a lib/libLLVMSparcAsmPrinter.a lib/libLLVMSparcCodeGen.a lib/libLLVMSparcDesc.a lib/libLLVMSparcDisassembler.a lib/libLLVMSparcInfo.a lib/libLLVMSupport.a lib/libLLVMSystemZAsmParser.a lib/libLLVMSystemZAsmPrinter.a lib/libLLVMSystemZCodeGen.a lib/libLLVMSystemZDesc.a lib/libLLVMSystemZDisassembler.a lib/libLLVMSystemZInfo.a lib/libLLVMTarget.a lib/libLLVMTransformUtils.a lib/libLLVMVectorize.a lib/libLLVMX86AsmParser.a lib/libLLVMX86AsmPrinter.a lib/libLLVMX86CodeGen.a lib/libLLVMX86Desc.a lib/libLLVMX86Disassembler.a lib/libLLVMX86Info.a lib/libLLVMX86Utils.a lib/libLLVMXCoreAsmPrinter.a lib/libLLVMXCoreCodeGen.a lib/libLLVMXCoreDesc.a lib/libLLVMXCoreDisassembler.a lib/libLLVMXCoreInfo.a
   
 after_build:
-  - cd %WORK_DIR%
-  - 7z a llvm_one.zip build/NinjaMinGW/llvm/lib/*.a
+  # Make cache to continue in part 2
+  - find . -name *.obj -o -name *.a -o -name *.inc -o -name *.tmp > tar_file.list
+  - tar zcvf ninja_cache.tar.gz -T tar_file.list lib/clang include bin/clang-tblgen.exe bin/llvm-tblgen.exe .ninja_deps .ninja_log
+  - mv ninja_cache.tar.gz %WORK_DIR%
+  #- 7z a llvm_one.zip build/NinjaMinGW/llvm/lib/*.a
 
 test_script:
-  - 'echo test_script'
+  - 'echo skip test'
   
 artifacts:
-  - path: llvm_one.zip
-    name: LLVM ONE
+  - path: ninja_cache.tar.gz
+    name: LLVM CACHE
