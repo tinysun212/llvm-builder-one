@@ -81,13 +81,13 @@ build_script:
 after_build:
   # Make cache to continue in part 2
   - find . -name *.obj -o -name *.a -o -name *.inc -o -name *.tmp > tar_file.list
-  - tar zcvf ninja_cache.tar.gz -T tar_file.list include bin/clang-tblgen.exe bin/llvm-tblgen.exe .ninja_deps .ninja_log
-  - mv ninja_cache.tar.gz %APPVEYOR_BUILD_FOLDER%
+  - tar zcvf llvm_cache.tar.gz -T tar_file.list include bin/clang-tblgen.exe bin/llvm-tblgen.exe .ninja_deps .ninja_log lib/llvm
+  - mv llvm_cache.tar.gz %APPVEYOR_BUILD_FOLDER%
   #- 7z a llvm_one.zip build/NinjaMinGW/llvm/lib/*.a
 
 test_script:
   - 'echo skip test'
   
 artifacts:
-  - path: ninja_cache.tar.gz
+  - path: llvm_cache.tar.gz
     name: LLVM CACHE
