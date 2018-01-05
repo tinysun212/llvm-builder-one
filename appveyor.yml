@@ -81,7 +81,7 @@ build_script:
 after_build:
   # Make cache to continue in part 2
   - find . -name *.obj -o -name *.a -o -name *.inc -o -name *.tmp > tar_file.list
-  - tar zcvf llvm_cache.tar.gz -T tar_file.list include bin/clang-tblgen.exe bin/llvm-tblgen.exe .ninja_deps .ninja_log lib/llvm
+  - tar zcvf llvm_cache.tar.gz -T tar_file.list include bin/clang-tblgen.exe bin/llvm-tblgen.exe .ninja_deps .ninja_log
   - mv llvm_cache.tar.gz %APPVEYOR_BUILD_FOLDER%
   #- 7z a llvm_one.zip build/NinjaMinGW/llvm/lib/*.a
 
