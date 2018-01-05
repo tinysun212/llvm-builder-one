@@ -12,6 +12,7 @@ install:
   - SET "PATH_MINGW64=c:\msys64\mingw64\bin;c:\msys64\usr\bin"
   - SET PATH=%PATH_MINGW64%;%PATH_ORIGINAL%
   - SET WORK_DIR=c:\projects\llvm-builder
+  - mkdir %WORK_DIR%
   - cd %WORK_DIR%
   
   # Install packages
@@ -81,7 +82,7 @@ after_build:
   # Make cache to continue in part 2
   - find . -name *.obj -o -name *.a -o -name *.inc -o -name *.tmp > tar_file.list
   - tar zcvf ninja_cache.tar.gz -T tar_file.list include bin/clang-tblgen.exe bin/llvm-tblgen.exe .ninja_deps .ninja_log
-  - mv ninja_cache.tar.gz %WORK_DIR%
+  - mv ninja_cache.tar.gz %APPVEYOR_BUILD_FOLDER%
   #- 7z a llvm_one.zip build/NinjaMinGW/llvm/lib/*.a
 
 test_script:
