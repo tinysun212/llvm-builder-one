@@ -11,8 +11,7 @@ install:
   - SET PATH_ORIGINAL=%PATH%
   - SET "PATH_MINGW64=c:\msys64\mingw64\bin;c:\msys64\usr\bin"
   - SET PATH=%PATH_MINGW64%;%PATH_ORIGINAL%
-  - SET WORK_DIR=c:\projects\swift
-  - mkdir %WORK_DIR%
+  - SET WORK_DIR=c:\projects
   - cd %WORK_DIR%
   
   # Install packages
