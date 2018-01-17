@@ -9,7 +9,7 @@ install:
   # Set Environment
   - SET PATH_ORIGINAL=%PATH%
   - SET "PATH_CYGWIN64=c:\cygwin64\bin"
-  - SET PATH=%PATH_MINGW64%;%PATH_ORIGINAL%
+  - SET PATH=%PATH_CYGWIN64%;%PATH_ORIGINAL%
   - SET WORK_DIR=c:\projects
   - cd %WORK_DIR%
   
@@ -20,6 +20,7 @@ install:
     -P clang
     -P pkg-config
     -P python
+    -P wget
   
   # Download source
   - cd %WORK_DIR%
