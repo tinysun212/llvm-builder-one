@@ -21,6 +21,7 @@ install:
     -P pkg-config
     -P python
     -P wget
+    -P iconv
   
   # Download source
   - cd %WORK_DIR%
