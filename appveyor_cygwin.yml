@@ -21,7 +21,7 @@ install:
     -P pkg-config
     -P python
     -P wget
-    -P iconv
+    -P libiconv-devel
   
   # Download source
   - cd %WORK_DIR%
