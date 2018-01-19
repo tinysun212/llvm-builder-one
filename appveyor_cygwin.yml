@@ -73,7 +73,7 @@ build_script:
     lib/libLLVMAArch64Info.a lib/libLLVMAArch64Utils.a lib/libLLVMAMDGPUAsmParser.a lib/libLLVMAMDGPUAsmPrinter.a
     lib/libLLVMAMDGPUCodeGen.a lib/libLLVMAMDGPUDesc.a lib/libLLVMAMDGPUDisassembler.a
     lib/libLLVMAMDGPUInfo.a lib/libLLVMAMDGPUUtils.a lib/libLLVMAnalysis.a lib/libLLVMARMAsmParser.a lib/libLLVMARMAsmPrinter.a
-    lib/libLLVMARMCodeGen.a lib/libLLVMARMDesc.a lib/libLLVMARMDisassembler.a lib/libLLVMARMInfo.a lib/libLLVMAsmParser.a lib/libLLVMAsmPrinter.a
+  #  lib/libLLVMARMCodeGen.a lib/libLLVMARMDesc.a lib/libLLVMARMDisassembler.a lib/libLLVMARMInfo.a lib/libLLVMAsmParser.a lib/libLLVMAsmPrinter.a
   #  lib/libLLVMBitReader.a lib/libLLVMBitWriter.a lib/libLLVMBPFAsmPrinter.a lib/libLLVMBPFCodeGen.a
   #  lib/libLLVMBPFDesc.a lib/libLLVMBPFDisassembler.a lib/libLLVMBPFInfo.a lib/libLLVMCodeGen.a lib/libLLVMCore.a lib/libLLVMCoroutines.a
   #  lib/libLLVMCoverage.a lib/libLLVMDebugInfoCodeView.a lib/libLLVMDebugInfoDWARF.a lib/libLLVMDebugInfoMSF.a
