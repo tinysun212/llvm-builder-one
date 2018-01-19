@@ -59,11 +59,11 @@ build_script:
   - cd %WORK_DIR%/build/Ninja-ReleaseAssert/llvm
   - SET WORK_DIR_IN_CYGWIN=/cygdrive/c/projects
   # workaround for llvm-tblgen.exe
-  - cmake -G Ninja -D CMAKE_BUILD_TYPE=RELEASE -DCMAKE_C_COMPILER=gcc  -DCMAKE_CXX_COMPILER=g++ -DLLVM_ENABLE_ASSERTIONS:BOOL=TRUE %WORK_DIR_IN_CYGWIN%/llvm
-  - ninja bin/llvm-tblgen.exe
-  - ninja clean
+  #- cmake -G Ninja -D CMAKE_BUILD_TYPE=RELEASE -DCMAKE_C_COMPILER=gcc  -DCMAKE_CXX_COMPILER=g++ -DLLVM_ENABLE_ASSERTIONS:BOOL=TRUE %WORK_DIR_IN_CYGWIN%/llvm
+  #- ninja bin/llvm-tblgen.exe
+  #- ninja clean
   #
-  - cmake -G Ninja -D CMAKE_BUILD_TYPE=RELEASE -DCMAKE_C_COMPILER=clang  -DCMAKE_CXX_COMPILER=clang++ -DLLVM_ENABLE_ASSERTIONS:BOOL=TRUE %WORK_DIR_IN_CYGWIN%/llvm
+  - cmake -G Ninja -DCMAKE_CXX_FLAGS=-O3 -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DLLVM_ENABLE_ASSERTIONS:BOOL=TRUE %WORK_DIR_IN_CYGWIN%/llvm
   - ninja lib/libclangAnalysis.a lib/libclangAPINotes.a lib/libclangARCMigrate.a lib/libclangAST.a lib/libclangASTMatchers.a lib/libclangBasic.a
     lib/libclangCodeGen.a lib/libclangDriver.a lib/libclangEdit.a lib/libclangFormat.a
     lib/libclangFrontend.a lib/libclangFrontendTool.a lib/libclangIndex.a lib/libclangLex.a lib/libclangParse.a lib/libclangRewrite.a
@@ -71,9 +71,9 @@ build_script:
     lib/libclangStaticAnalyzerCore.a lib/libclangStaticAnalyzerFrontend.a lib/libclangToolingCore.a lib/libLLVMAArch64AsmParser.a
     lib/libLLVMAArch64AsmPrinter.a lib/libLLVMAArch64CodeGen.a lib/libLLVMAArch64Desc.a lib/libLLVMAArch64Disassembler.a
     lib/libLLVMAArch64Info.a lib/libLLVMAArch64Utils.a lib/libLLVMAMDGPUAsmParser.a lib/libLLVMAMDGPUAsmPrinter.a
-  #  lib/libLLVMAMDGPUCodeGen.a lib/libLLVMAMDGPUDesc.a lib/libLLVMAMDGPUDisassembler.a
-  #  lib/libLLVMAMDGPUInfo.a lib/libLLVMAMDGPUUtils.a lib/libLLVMAnalysis.a lib/libLLVMARMAsmParser.a lib/libLLVMARMAsmPrinter.a
-  #  lib/libLLVMARMCodeGen.a lib/libLLVMARMDesc.a lib/libLLVMARMDisassembler.a lib/libLLVMARMInfo.a lib/libLLVMAsmParser.a lib/libLLVMAsmPrinter.a
+    lib/libLLVMAMDGPUCodeGen.a lib/libLLVMAMDGPUDesc.a lib/libLLVMAMDGPUDisassembler.a
+    lib/libLLVMAMDGPUInfo.a lib/libLLVMAMDGPUUtils.a lib/libLLVMAnalysis.a lib/libLLVMARMAsmParser.a lib/libLLVMARMAsmPrinter.a
+    lib/libLLVMARMCodeGen.a lib/libLLVMARMDesc.a lib/libLLVMARMDisassembler.a lib/libLLVMARMInfo.a lib/libLLVMAsmParser.a lib/libLLVMAsmPrinter.a
   #  lib/libLLVMBitReader.a lib/libLLVMBitWriter.a lib/libLLVMBPFAsmPrinter.a lib/libLLVMBPFCodeGen.a
   #  lib/libLLVMBPFDesc.a lib/libLLVMBPFDisassembler.a lib/libLLVMBPFInfo.a lib/libLLVMCodeGen.a lib/libLLVMCore.a lib/libLLVMCoroutines.a
   #  lib/libLLVMCoverage.a lib/libLLVMDebugInfoCodeView.a lib/libLLVMDebugInfoDWARF.a lib/libLLVMDebugInfoMSF.a
