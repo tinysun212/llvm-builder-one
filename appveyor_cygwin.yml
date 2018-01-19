@@ -22,6 +22,8 @@ install:
     -P python
     -P wget
     -P libiconv-devel
+    -P gcc
+    -P g++
   
   # Download source
   - cd %WORK_DIR%
