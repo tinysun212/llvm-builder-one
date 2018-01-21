@@ -65,7 +65,7 @@ build_script:
   #
   - cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DLLVM_ENABLE_ASSERTIONS:BOOL=TRUE %WORK_DIR_IN_CYGWIN%/llvm
   - ninja bin/llvm-tblgen.exe
-  - cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DLLVM_ENABLE_ASSERTIONS:BOOL=TRUE %WORK_DIR_IN_CYGWIN%/llvm
+  #- cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DLLVM_ENABLE_ASSERTIONS:BOOL=TRUE %WORK_DIR_IN_CYGWIN%/llvm
   - ninja lib/libclangAnalysis.a lib/libclangAPINotes.a lib/libclangARCMigrate.a lib/libclangAST.a lib/libclangASTMatchers.a lib/libclangBasic.a
     lib/libclangCodeGen.a lib/libclangDriver.a lib/libclangEdit.a lib/libclangFormat.a
     lib/libclangFrontend.a lib/libclangFrontendTool.a lib/libclangIndex.a lib/libclangLex.a lib/libclangParse.a lib/libclangRewrite.a
