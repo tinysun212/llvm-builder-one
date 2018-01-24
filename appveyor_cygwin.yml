@@ -58,8 +58,8 @@ build_script:
   # Build clang
   # We do not compile all of them because it takes longer than an hour which is allowed by free appveyor account.
   # Remainder will be compiled in the llvm-builder.
-  - c:/cygwin64/bin/mkdir -p %WORK_DIR%/build/Ninja-ReleaseAssert/llvm
-  - cd %WORK_DIR%/build/Ninja-ReleaseAssert/llvm
+  - MKDIR %WORK_DIR%\build\Ninja-ReleaseAssert\llvm-cygwin-x86_64
+  - CD %WORK_DIR%/build/Ninja-ReleaseAssert/llvm-cygwin-x86_64
   - SET WORK_DIR_IN_CYGWIN=/cygdrive/c/projects
   # workaround for llvm-tblgen.exe
   #- cmake -G Ninja -D CMAKE_BUILD_TYPE=RELEASE -DCMAKE_C_COMPILER=gcc  -DCMAKE_CXX_COMPILER=g++ -DLLVM_ENABLE_ASSERTIONS:BOOL=TRUE %WORK_DIR_IN_CYGWIN%/llvm
