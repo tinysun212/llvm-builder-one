@@ -12,7 +12,7 @@ install:
   - SET "PATH_MSYS64=c:\msys64\usr\bin"
   - SET PATH=%PATH_MSYS64%;%PATH_ORIGINAL%
   - SET WORK_DIR=c:\projects
-  - cd %WORK_DIR%
+  - CD %WORK_DIR%
   
   # Install packages
   #- C:\cygwin64\setup-x86_64.exe -qnNdO -R C:/cygwin64 -s http://cygwin.mirror.constant.com -l C:/cygwin64/var/cache/setup 
@@ -31,7 +31,7 @@ install:
   - choco install ninja
   
   # Download source
-  - cd %WORK_DIR%
+  - CD %WORK_DIR%
   # llvm source
   - wget -q -O llvm_src.tar.gz https://github.com/tinysun212/swift-llvm/archive/swift-windows-4.0-branch.tar.gz
   - tar zxf llvm_src.tar.gz
@@ -78,15 +78,14 @@ build_script:
   #  -DLLVM_BUILD_EXTERNAL_COMPILER_RT:BOOL=TRUE -DLLVM_LIT_ARGS=-sv -DCMAKE_INSTALL_PREFIX:PATH=/usr/ -DINTERNAL_INSTALL_PREFIX=local
   #  %WORK_DIR_IN_CYGWIN%/llvm
   - ninja lib/clangAnalysis.lib lib/clangAPINotes.lib lib/clangARCMigrate.lib lib/clangAST.lib lib/clangASTMatchers.lib
-    lib/clangBasic.lib
-  #  lib/libclangCodeGen.a lib/libclangDriver.a lib/libclangEdit.a lib/libclangFormat.a
-  #  lib/libclangFrontend.a lib/libclangFrontendTool.a lib/libclangIndex.a lib/libclangLex.a lib/libclangParse.a lib/libclangRewrite.a
-  #  lib/libclangRewriteFrontend.a lib/libclangSema.a lib/libclangSerialization.a lib/libclangStaticAnalyzerCheckers.a
-  #  lib/libclangStaticAnalyzerCore.a lib/libclangStaticAnalyzerFrontend.a lib/libclangToolingCore.a lib/libLLVMAArch64AsmParser.a
-  #  lib/libLLVMAArch64AsmPrinter.a lib/libLLVMAArch64CodeGen.a lib/libLLVMAArch64Desc.a lib/libLLVMAArch64Disassembler.a
-  #  lib/libLLVMAArch64Info.a lib/libLLVMAArch64Utils.a lib/libLLVMAnalysis.a lib/libLLVMARMAsmParser.a lib/libLLVMARMAsmPrinter.a
-  #  lib/libLLVMARMCodeGen.a lib/libLLVMARMDesc.a lib/libLLVMARMDisassembler.a lib/libLLVMARMInfo.a lib/libLLVMAsmParser.a lib/libLLVMAsmPrinter.a
-  #  lib/libLLVMBitReader.a lib/libLLVMBitWriter.a lib/libLLVMCodeGen.a lib/libLLVMCore.a lib/libLLVMCoroutines.a
+    lib/clangBasic.lib lib/clangCodeGen.lib lib/clangDriver.lib lib/clangEdit.lib lib/clangFormat.lib
+    lib/clangFrontend.lib lib/clangFrontendTool.lib lib/clangIndex.lib lib/clangLex.lib lib/clangParse.lib lib/clangRewrite.lib
+    lib/clangRewriteFrontend.lib lib/clangSema.lib lib/clangSerialization.lib lib/clangStaticAnalyzerCheckers.lib
+    lib/clangStaticAnalyzerCore.lib lib/clangStaticAnalyzerFrontend.lib lib/clangToolingCore.lib lib/LLVMAArch64AsmParser.lib
+    lib/LLVMAArch64AsmPrinter.lib lib/LLVMAArch64CodeGen.lib lib/LLVMAArch64Desc.lib lib/LLVMAArch64Disassembler.lib
+    lib/LLVMAArch64Info.lib lib/LLVMAArch64Utils.lib lib/LLVMAnalysis.lib lib/LLVMARMAsmParser.lib lib/LLVMARMAsmPrinter.lib
+    lib/LLVMARMCodeGen.lib lib/LLVMARMDesc.lib lib/LLVMARMDisassembler.lib lib/LLVMARMInfo.lib lib/LLVMAsmParser.lib lib/LLVMAsmPrinter.lib
+    lib/LLVMBitReader.lib lib/LLVMBitWriter.lib lib/LLVMCodeGen.lib lib/LLVMCore.lib lib/LLVMCoroutines.lib
 
   ############################### to 2nd builder (to remove).
   #  lib/libLLVMCoverage.a lib/libLLVMDebugInfoCodeView.a lib/libLLVMDebugInfoDWARF.a lib/libLLVMDebugInfoMSF.a
@@ -101,10 +100,10 @@ after_build:
   # Make cache to continue in llvm-builder
   - find . -name *.o -o -name *.obj -o -name *.a -o -name *.lib -o -name *.inc -o -name *.tmp > tar_file.list
   - tar zcvf swift_llvm_cache.tar.gz -T tar_file.list include bin/clang-tblgen.exe bin/llvm-tblgen.exe .ninja_deps .ninja_log
-  - mv swift_llvm_cache.tar.gz %APPVEYOR_BUILD_FOLDER%
+  - MOVE swift_llvm_cache.tar.gz %APPVEYOR_BUILD_FOLDER%
 
 test_script:
-  - 'echo skip test'
+  - ECHO skip test
   
 artifacts:
   - path: swift_llvm_cache.tar.gz
