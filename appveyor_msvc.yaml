@@ -1,6 +1,6 @@
 version: 1.0.{build}
 
-image: Visual Studio 2017
+#image: Visual Studio 2017
 
 environment:
   matrix:
@@ -62,6 +62,7 @@ build_script:
   - MKDIR %WORK_DIR%\build\NinjaMSVC\llvm
   - CD %WORK_DIR%/build/NinjaMSVC/llvm
   - SET WORK_DIR_IN_CYGWIN=/cygdrive/c/projects
+  - CALL "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
   - cmake -G "Ninja" -DCMAKE_C_COMPILER=clang-cl -DCMAKE_CXX_COMPILER=clang-cl -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_CXX_FLAGS="-DLLVM_ENABLE_DUMP" ..\..\..\llvm
 
   # Cygwin64 
