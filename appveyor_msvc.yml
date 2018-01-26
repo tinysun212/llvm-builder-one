@@ -34,7 +34,8 @@ install:
   # Download source
   - cd %WORK_DIR%
   # llvm source
-  - %WGET% -q -O llvm_src.tar.gz https://github.com/tinysun212/swift-llvm/archive/swift-windows-4.0-branch.tar.gz
+  - dir c:\msys64\usr\bin\w*.*
+  - CMD: %WGET% -q -O llvm_src.tar.gz https://github.com/tinysun212/swift-llvm/archive/swift-windows-4.0-branch.tar.gz
   - tar zxf llvm_src.tar.gz
   - mv swift-llvm-swift-windows-4.0-branch llvm
   # clang source
