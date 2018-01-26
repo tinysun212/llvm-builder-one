@@ -51,7 +51,7 @@ install:
       swift-windows-4.0-branch/test/Driver/Inputs/multilib_32bit_linux_tree/usr/bin/i386-unknown-linux-gnu-ld
       swift-windows-4.0-branch/test/Driver/Inputs/multilib_64bit_linux_tree/usr/bin/x86_64-unknown-linux-gnu-as
       swift-windows-4.0-branch/test/Driver/Inputs/multilib_64bit_linux_tree/usr/bin/x86_64-unknown-linux-gnu-ld
-  - %TAR% zxf clang_src.tar.gz
+  - c:\msys64\usr\bin\tar.exe zxf clang_src.tar.gz
   - MOVE swift-windows-4.0-branch clang
   # link clang into llvm
   - CD %WORK_DIR%/llvm/tools
