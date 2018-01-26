@@ -35,14 +35,14 @@ install:
   - cd %WORK_DIR%
   # llvm source
   - dir c:\msys64\usr\bin\w*.*
-  - CMD: %WGET% -q -O llvm_src.tar.gz https://github.com/tinysun212/swift-llvm/archive/swift-windows-4.0-branch.tar.gz
+  - c:\msys64\usr\bin\wget.exe -q -O llvm_src.tar.gz https://github.com/tinysun212/swift-llvm/archive/swift-windows-4.0-branch.tar.gz
   - tar zxf llvm_src.tar.gz
   - mv swift-llvm-swift-windows-4.0-branch llvm
   # clang source
-  - %WGET% -q -O clang_src.tar.gz https://github.com/tinysun212/swift-clang/archive/swift-windows-4.0-branch.tar.gz
+  - c:\msys64\usr\bin\wget.exe -q -O clang_src.tar.gz https://github.com/tinysun212/swift-clang/archive/swift-windows-4.0-branch.tar.gz
   # Pre-extract the targets of the symbolic links
   # The Windows native symbolic link system cann't create a symbolic link to non-exist target.
-  - %TAR% zxf clang_src.tar.gz 
+  - c:\msys64\usr\bin\tar.exe zxf clang_src.tar.gz 
       swift-windows-4.0-branch/test/Driver/Inputs/basic_cross_linux_tree/usr/bin/i386-unknown-linux-gnu-ld.gold
       swift-windows-4.0-branch/test/Driver/Inputs/basic_cross_linux_tree/usr/bin/x86_64-unknown-linux-gnu-ld.gold
       swift-windows-4.0-branch/test/Driver/Inputs/basic_cross_linux_tree/usr/i386-unknown-linux-gnu/bin/ld.gold
