@@ -12,6 +12,8 @@ install:
   #- SET "PATH_MSVC64=c:\cygwin64\bin"
   #- SET PATH=%PATH_CYGWIN64%;%PATH_ORIGINAL%
   - SET WORK_DIR=c:\projects
+  - SET WGET=c:\msys64\usr\bin\wget.exe
+  - SET TAR=c:\msys64\usr\bin\tar.exe
   - cd %WORK_DIR%
   
   # Install packages
@@ -32,14 +34,14 @@ install:
   # Download source
   - cd %WORK_DIR%
   # llvm source
-  - wget -q -O llvm_src.tar.gz https://github.com/tinysun212/swift-llvm/archive/swift-windows-4.0-branch.tar.gz
+  - %WGET% -q -O llvm_src.tar.gz https://github.com/tinysun212/swift-llvm/archive/swift-windows-4.0-branch.tar.gz
   - tar zxf llvm_src.tar.gz
   - mv swift-llvm-swift-windows-4.0-branch llvm
   # clang source
-  - wget -q -O clang_src.tar.gz https://github.com/tinysun212/swift-clang/archive/swift-windows-4.0-branch.tar.gz
+  - %WGET% -q -O clang_src.tar.gz https://github.com/tinysun212/swift-clang/archive/swift-windows-4.0-branch.tar.gz
   # Pre-extract the targets of the symbolic links
   # The Windows native symbolic link system cann't create a symbolic link to non-exist target.
-  - tar zxf clang_src.tar.gz 
+  - %TAR% zxf clang_src.tar.gz 
       swift-windows-4.0-branch/test/Driver/Inputs/basic_cross_linux_tree/usr/bin/i386-unknown-linux-gnu-ld.gold
       swift-windows-4.0-branch/test/Driver/Inputs/basic_cross_linux_tree/usr/bin/x86_64-unknown-linux-gnu-ld.gold
       swift-windows-4.0-branch/test/Driver/Inputs/basic_cross_linux_tree/usr/i386-unknown-linux-gnu/bin/ld.gold
@@ -48,8 +50,8 @@ install:
       swift-windows-4.0-branch/test/Driver/Inputs/multilib_32bit_linux_tree/usr/bin/i386-unknown-linux-gnu-ld
       swift-windows-4.0-branch/test/Driver/Inputs/multilib_64bit_linux_tree/usr/bin/x86_64-unknown-linux-gnu-as
       swift-windows-4.0-branch/test/Driver/Inputs/multilib_64bit_linux_tree/usr/bin/x86_64-unknown-linux-gnu-ld
-  - tar zxf clang_src.tar.gz
-  - mv swift-windows-4.0-branch clang
+  - %TAR% zxf clang_src.tar.gz
+  - MOVE swift-windows-4.0-branch clang
   # link clang into llvm
   - CD %WORK_DIR%/llvm/tools
   - MKLINK /D clang ..\..\clang
