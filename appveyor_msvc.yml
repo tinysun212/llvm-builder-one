@@ -7,76 +7,40 @@ environment:
   - PLATFORM: x64
 
 install:
-  # Set Environment
+  # Set Environment Variables
   - SET PATH_ORIGINAL=%PATH%
-  - SET "PATH_MSYS64=c:\msys64\usr\bin"
-  - SET PATH=%PATH_MSYS64%;%PATH_ORIGINAL%
   - SET WORK_DIR=c:\projects
   - CD %WORK_DIR%
   
   # Install packages
-  #- C:\cygwin64\setup-x86_64.exe -qnNdO -R C:/cygwin64 -s http://cygwin.mirror.constant.com -l C:/cygwin64/var/cache/setup 
-  #  -P cmake
-  #  -P ninja
-  #  -P clang
-  #  -P pkg-config
-  #  -P python
-  #  -P wget
-  #  -P libiconv-devel
-  #  -P gcc
-  #  -P g++
-  # workaround for llvm-tblgen.exe error "Unknown pseudo relocation protocol version 256."
-  #- wget -q http://cygwin.mirror.constant.com/x86_64/release/binutils/binutils-2.25-4.tar.xz
-  #- tar -x -C / -f binutils-2.25-4.tar.xz
-  - choco install ninja
+  - choco install -y ninja
+  - choco install -y wget
   
   # Download source
   - CD %WORK_DIR%
   # llvm source
   - wget -q -O llvm_src.tar.gz https://github.com/tinysun212/swift-llvm/archive/swift-windows-4.0-branch.tar.gz
-  - tar zxf llvm_src.tar.gz
+  # Extract gz and then extract tar in silent mode(-bd -bso0)
+  - 7z x llvm_src.tar.gz -so | 7z x -si -ttar -bd -bso0
+  - MOVE pax_global_header llvm_commit_id
   - MOVE swift-llvm-swift-windows-4.0-branch llvm
   # clang source
   - wget -q -O clang_src.tar.gz https://github.com/tinysun212/swift-clang/archive/swift-windows-4.0-branch.tar.gz
-  # Pre-extract the targets of the symbolic links
-  # The Windows native symbolic link system cann't create a symbolic link to non-exist target.
-  - tar zxf clang_src.tar.gz 
-      swift-clang-swift-windows-4.0-branch/test/Driver/Inputs/basic_cross_linux_tree/usr/bin/i386-unknown-linux-gnu-ld.gold
-      swift-clang-swift-windows-4.0-branch/test/Driver/Inputs/basic_cross_linux_tree/usr/bin/x86_64-unknown-linux-gnu-ld.gold
-      swift-clang-swift-windows-4.0-branch/test/Driver/Inputs/basic_cross_linux_tree/usr/i386-unknown-linux-gnu/bin/ld.gold
-      swift-clang-swift-windows-4.0-branch/test/Driver/Inputs/basic_cross_linux_tree/usr/x86_64-unknown-linux-gnu/bin/ld.gold
-      swift-clang-swift-windows-4.0-branch/test/Driver/Inputs/multilib_32bit_linux_tree/usr/bin/i386-unknown-linux-gnu-as
-      swift-clang-swift-windows-4.0-branch/test/Driver/Inputs/multilib_32bit_linux_tree/usr/bin/i386-unknown-linux-gnu-ld
-      swift-clang-swift-windows-4.0-branch/test/Driver/Inputs/multilib_64bit_linux_tree/usr/bin/x86_64-unknown-linux-gnu-as
-      swift-clang-swift-windows-4.0-branch/test/Driver/Inputs/multilib_64bit_linux_tree/usr/bin/x86_64-unknown-linux-gnu-ld
-  - tar zxf clang_src.tar.gz
+  - 7z x clang_src.tar.gz -so | 7z x -si -ttar -bd -bso0
+  - MOVE pax_global_header clang_commit_id
   - MOVE swift-clang-swift-windows-4.0-branch clang
   # link clang into llvm
   - CD %WORK_DIR%/llvm/tools
   - MKLINK /D clang ..\..\clang
   
 build_script:
-  - SET PATH=%PATH_ORIGINAL%
   # Build clang
-  # We do not compile all of them because it takes longer than an hour which is allowed by free appveyor account.
-  # Remainder will be compiled in the llvm-builder.
   - MKDIR %WORK_DIR%\build\NinjaMSVC\llvm
   - CD %WORK_DIR%/build/NinjaMSVC/llvm
-  - SET WORK_DIR_IN_CYGWIN=/cygdrive/c/projects
   - CALL "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
   - cmake -G "Ninja" -DCMAKE_C_COMPILER=clang-cl -DCMAKE_CXX_COMPILER=clang-cl -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_CXX_FLAGS="-DLLVM_ENABLE_DUMP" ..\..\..\llvm
-
-  # Cygwin64 
-  #- cmake -G Ninja -DCMAKE_C_COMPILER:PATH=/usr/bin/clang -DCMAKE_CXX_COMPILER:PATH=/usr/bin/clang++ -DLLVM_VERSION_MAJOR:STRING=4
-  #  -DLLVM_VERSION_MINOR:STRING=0 -DLLVM_VERSION_PATCH:STRING=0 -DCLANG_VERSION_MAJOR:STRING=4 -DCLANG_VERSION_MINOR:STRING=0
-  #  -DCLANG_VERSION_PATCH:STRING=0 -DCMAKE_MAKE_PROGRAM=/usr/bin/ninja -DLLVM_ENABLE_ASSERTIONS=TRUE
-  #  '-DLLVM_TARGETS_TO_BUILD=X86;ARM;AArch64;PowerPC;SystemZ' -DCMAKE_LIBTOOL:PATH=/usr/bin/libtool
-  #  '-DCMAKE_C_FLAGS=  -Wno-unknown-warning-option -Werror=unguarded-availability-new -fno-stack-protector'
-  #  '-DCMAKE_CXX_FLAGS=  -Wno-unknown-warning-option -Werror=unguarded-availability-new -fno-stack-protector'
-  #  '-DCMAKE_C_FLAGS_RELWITHDEBINFO=-O2 -DNDEBUG' '-DCMAKE_CXX_FLAGS_RELWITHDEBINFO=-O2 -DNDEBUG' -DCMAKE_BUILD_TYPE:STRING=Release
-  #  -DLLVM_TOOL_SWIFT_BUILD:BOOL=NO -DLLVM_INCLUDE_DOCS:BOOL=TRUE -DLLVM_ENABLE_LTO:STRING= -DLLVM_TOOL_COMPILER_RT_BUILD:BOOL=TRUE
-  #  -DLLVM_BUILD_EXTERNAL_COMPILER_RT:BOOL=TRUE -DLLVM_LIT_ARGS=-sv -DCMAKE_INSTALL_PREFIX:PATH=/usr/ -DINTERNAL_INSTALL_PREFIX=local
-  #  %WORK_DIR_IN_CYGWIN%/llvm
+  # We do not compile all of them because it takes longer than an hour which is allowed by free appveyor account.
+  # Remainder will be compiled in the llvm-builder.
   - ninja lib/clangAnalysis.lib lib/clangAPINotes.lib lib/clangARCMigrate.lib lib/clangAST.lib lib/clangASTMatchers.lib
     lib/clangBasic.lib lib/clangCodeGen.lib lib/clangDriver.lib lib/clangEdit.lib lib/clangFormat.lib
     lib/clangFrontend.lib lib/clangFrontendTool.lib lib/clangIndex.lib lib/clangLex.lib lib/clangParse.lib lib/clangRewrite.lib
@@ -86,35 +50,8 @@ build_script:
     lib/LLVMAArch64Info.lib lib/LLVMAArch64Utils.lib lib/LLVMAnalysis.lib lib/LLVMARMAsmParser.lib lib/LLVMARMAsmPrinter.lib
     lib/LLVMARMCodeGen.lib lib/LLVMARMDesc.lib lib/LLVMARMDisassembler.lib lib/LLVMARMInfo.lib lib/LLVMAsmParser.lib lib/LLVMAsmPrinter.lib
     lib/LLVMBitReader.lib lib/LLVMBitWriter.lib lib/LLVMCodeGen.lib lib/LLVMCore.lib lib/LLVMCoroutines.lib
-
-  ############################### to 2nd builder (to remove).
-  #  lib/libLLVMCoverage.a lib/libLLVMDebugInfoCodeView.a lib/libLLVMDebugInfoDWARF.a lib/libLLVMDebugInfoMSF.a
-  #  lib/libLLVMDemangle.a lib/libLLVMExecutionEngine.a lib/libLLVMGlobalISel.a lib/libLLVMHexagonAsmParser.a lib/libLLVMHexagonCodeGen.a
-  #  lib/libLLVMHexagonDesc.a lib/libLLVMHexagonDisassembler.a lib/libLLVMHexagonInfo.a lib/libLLVMInstCombine.a
-  #  lib/libLLVMInstrumentation.a lib/libLLVMipo.a lib/libLLVMIRReader.a lib/libLLVMLanaiAsmParser.a
-    
-  #- ninja lib/libLLVMLanaiCodeGen.a lib/libLLVMLanaiDesc.a lib/libLLVMLanaiDisassembler.a lib/libLLVMLanaiInfo.a lib/libLLVMLanaiInstPrinter.a lib/libLLVMLinker.a lib/libLLVMLTO.a lib/libLLVMMC.a lib/libLLVMMCDisassembler.a lib/libLLVMMCJIT.a 
   
 after_build:
-  - SET PATH=%PATH_MSYS64%;%PATH_ORIGINAL%
-  # Make cache to continue in llvm-builder
-  #- find . -name *.o -o -name *.obj -o -name *.a -o -name *.lib -o -name *.inc -o -name *.tmp -o -name *.res -o -name *.manifest > tar_file.list
-  #- find ./include -type f >> tar_file.list
-  #- sort -u tar_file.list > tar_file_sorted.list
-  #- tar zcvf swift_llvm_cache.tar.gz -T tar_file_sorted.list ./bin/clang-tblgen.exe ./bin/llvm-tblgen.exe .ninja_deps .ninja_log
-  #- ECHO *.obj > tar_file.list
-  #- ECHO *.lib >> tar_file.list
-  #- ECHO *.inc >> tar_file.list
-  #- ECHO *.tmp >> tar_file.list
-  #- ECHO *.res >> tar_file.list
-  #- ECHO *.manifest >> tar_file.list
-  #- ECHO include >> tar_file.list
-  #- ECHO bin/clang-tblgen.exe >> tar_file.list
-  #- ECHO bin/llvm-tblgen.exe >> tar_file.list
-  #- ECHO .ninja_deps >> tar_file.list
-  #- ECHO .ninja_log >> tar_file.list
-  #- 7z a swift_llvm_cache.tar @tar_file.list
-  #- 7z a swift_llvm_cache.tar.gz swift_llvm_cache.tar
   - 7z a -so -ttar -r dummy *.obj *.lib *.inc *.tmp *.res *.manifest 
                             include bin/clang-tblgen.exe bin/llvm-tblgen.exe .ninja_deps .ninja_log |
     7z a -si -tgzip -bd -bso0 swift_llvm_cache.tar.gz
