@@ -113,8 +113,9 @@ after_build:
   - ECHO bin/llvm-tblgen.exe >> tar_file.list
   - ECHO .ninja_deps >> tar_file.list
   - ECHO .ninja_log >> tar_file.list
-  - 7z a swift_llvm_cache.tar @tar_file.list
-  - 7z a swift_llvm_cache.tar.gz swift_llvm_cache.tar
+  #- 7z a swift_llvm_cache.tar @tar_file.list
+  #- 7z a swift_llvm_cache.tar.gz swift_llvm_cache.tar
+  - 7z a -so -ttar dummy @tar_file.list | 7z a -si -tgzip -bd -bso0 swift_llvm_cache.tar.gz
   - MOVE swift_llvm_cache.tar.gz %APPVEYOR_BUILD_FOLDER%
 
 test_script:
