@@ -100,7 +100,7 @@ after_build:
   # Make cache to continue in llvm-builder
   - find . -name *.o -o -name *.obj -o -name *.a -o -name *.lib -o -name *.inc -o -name *.tmp -o -name *.res -o -name *.manifest > tar_file.list
   - find ./include -type f >> tar_file.list
-  - sort -u tar_file.lst > tar_file_sorted.lst
+  - sort -u tar_file.list > tar_file_sorted.list
   - tar zcvf swift_llvm_cache.tar.gz -T tar_file_sorted.list ./bin/clang-tblgen.exe ./bin/llvm-tblgen.exe .ninja_deps .ninja_log
   - MOVE swift_llvm_cache.tar.gz %APPVEYOR_BUILD_FOLDER%
 
