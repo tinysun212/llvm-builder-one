@@ -2,72 +2,18 @@ version: 1.0.{build}
 
 environment:
   matrix:
-  - COMPILER: gcc
-    PLATFORM: mingw64
+  - PLATFORM: mingw64
+  - PLATFORM: cygwin64
+  - PLATFORM: msvc
 
 install:
-  # Set Environment
-  - 'echo End intall at: & time /t'
-  - SET PATH_ORIGINAL=%PATH%
-  - SET "PATH_MINGW64=c:\msys64\mingw64\bin;c:\msys64\usr\bin"
-  - SET PATH=%PATH_MINGW64%;%PATH_ORIGINAL%
-  - SET WORK_DIR=c:\projects
-  - SET GIT_TAG_OR_BRANCH=swift-4.0.3+mingw.20180212
-  - SET TAG_OR_BRANCH_IN_FOLDER=swift-4.0.3-mingw.20180212  
-  #- SET GIT_TAG_OR_BRANCH=swift-windows-4.0-branch  
-  - cd %WORK_DIR%
-  
-  # Install packages
-  - pacman -S --noconfirm mingw-w64-x86_64-cmake
-  - pacman -S --noconfirm mingw-w64-x86_64-ninja
-  - pacman -S --noconfirm mingw-w64-x86_64-clang
-  - pacman -S --noconfirm mingw-w64-x86_64-winpthreads
-  - pacman -S --noconfirm mingw-w64-x86_64-pkg-config
-  - pacman -S --noconfirm mingw-w64-x86_64-dlfcn
-  - pacman -S --noconfirm python
-  - pacman -S --noconfirm mingw-w64-x86_64-python2
-  
-  # Download source
-  - cd %WORK_DIR%
-  # llvm source
-  - wget -q -O llvm_src.tar.gz https://github.com/tinysun212/swift-llvm/archive/%GIT_TAG_OR_BRANCH%.tar.gz
-  - tar zxf llvm_src.tar.gz
-  - MOVE swift-llvm-%TAG_OR_BRANCH_IN_FOLDER% llvm
-  # clang source
-  - wget -q -O clang_src.tar.gz https://github.com/tinysun212/swift-clang/archive/%GIT_TAG_OR_BRANCH%.tar.gz
-  # Pre-extract the targets of the symbolic links
-  # The Windows native symbolic link system cann't create a symbolic link to non-exist target.
-  - tar zxf clang_src.tar.gz 
-      swift-clang-%TAG_OR_BRANCH_IN_FOLDER%/test/Driver/Inputs/basic_cross_linux_tree/usr/bin/i386-unknown-linux-gnu-ld.gold
-      swift-clang-%TAG_OR_BRANCH_IN_FOLDER%/test/Driver/Inputs/basic_cross_linux_tree/usr/bin/x86_64-unknown-linux-gnu-ld.gold
-      swift-clang-%TAG_OR_BRANCH_IN_FOLDER%/test/Driver/Inputs/basic_cross_linux_tree/usr/i386-unknown-linux-gnu/bin/ld.gold
-      swift-clang-%TAG_OR_BRANCH_IN_FOLDER%/test/Driver/Inputs/basic_cross_linux_tree/usr/x86_64-unknown-linux-gnu/bin/ld.gold
-      swift-clang-%TAG_OR_BRANCH_IN_FOLDER%/test/Driver/Inputs/multilib_32bit_linux_tree/usr/bin/i386-unknown-linux-gnu-as
-      swift-clang-%TAG_OR_BRANCH_IN_FOLDER%/test/Driver/Inputs/multilib_32bit_linux_tree/usr/bin/i386-unknown-linux-gnu-ld
-      swift-clang-%TAG_OR_BRANCH_IN_FOLDER%/test/Driver/Inputs/multilib_64bit_linux_tree/usr/bin/x86_64-unknown-linux-gnu-as
-      swift-clang-%TAG_OR_BRANCH_IN_FOLDER%/test/Driver/Inputs/multilib_64bit_linux_tree/usr/bin/x86_64-unknown-linux-gnu-ld
-  - tar zxf clang_src.tar.gz
-  - MOVE swift-clang-%TAG_OR_BRANCH_IN_FOLDER% clang
-  # link clang into llvm
-  - cd %WORK_DIR%/llvm/tools
-  - mklink /d clang ..\..\clang
+  - call %APPVEYOR_BUILD_FOLDER%\install.bat
   
 build_script:
-  
-  # Build clang
-  # We do not compile all of them because it takes over an hour which is allowed by free appveyor account.
-  # Remainder will be compiled in the llvm-builder.
-  - c:/msys64/usr/bin/mkdir -p %WORK_DIR%/build/NinjaMinGW/llvm
-  - cd %WORK_DIR%/build/NinjaMinGW/llvm
-  - cmake -G Ninja -D CMAKE_BUILD_TYPE=RELEASE -DCMAKE_C_COMPILER=clang  -DCMAKE_CXX_COMPILER=clang++ -DLLVM_ENABLE_ASSERTIONS:BOOL=TRUE %WORK_DIR%/llvm
-  - ninja lib/libclangAnalysis.a lib/libclangAPINotes.a lib/libclangARCMigrate.a lib/libclangAST.a lib/libclangASTMatchers.a lib/libclangBasic.a lib/libclangCodeGen.a lib/libclangDriver.a lib/libclangEdit.a lib/libclangFormat.a lib/libclangFrontend.a lib/libclangFrontendTool.a lib/libclangIndex.a lib/libclangLex.a lib/libclangParse.a lib/libclangRewrite.a lib/libclangRewriteFrontend.a lib/libclangSema.a lib/libclangSerialization.a lib/libclangStaticAnalyzerCheckers.a lib/libclangStaticAnalyzerCore.a lib/libclangStaticAnalyzerFrontend.a lib/libclangToolingCore.a lib/libLLVMAArch64AsmParser.a lib/libLLVMAArch64AsmPrinter.a lib/libLLVMAArch64CodeGen.a lib/libLLVMAArch64Desc.a lib/libLLVMAArch64Disassembler.a lib/libLLVMAArch64Info.a lib/libLLVMAArch64Utils.a lib/libLLVMAMDGPUAsmParser.a lib/libLLVMAMDGPUAsmPrinter.a lib/libLLVMAMDGPUCodeGen.a lib/libLLVMAMDGPUDesc.a lib/libLLVMAMDGPUDisassembler.a lib/libLLVMAMDGPUInfo.a lib/libLLVMAMDGPUUtils.a lib/libLLVMAnalysis.a lib/libLLVMARMAsmParser.a lib/libLLVMARMAsmPrinter.a lib/libLLVMARMCodeGen.a lib/libLLVMARMDesc.a lib/libLLVMARMDisassembler.a lib/libLLVMARMInfo.a lib/libLLVMAsmParser.a lib/libLLVMAsmPrinter.a lib/libLLVMBitReader.a lib/libLLVMBitWriter.a lib/libLLVMBPFAsmPrinter.a lib/libLLVMBPFCodeGen.a lib/libLLVMBPFDesc.a lib/libLLVMBPFDisassembler.a lib/libLLVMBPFInfo.a lib/libLLVMCodeGen.a lib/libLLVMCore.a lib/libLLVMCoroutines.a lib/libLLVMCoverage.a lib/libLLVMDebugInfoCodeView.a lib/libLLVMDebugInfoDWARF.a lib/libLLVMDebugInfoMSF.a lib/libLLVMDemangle.a lib/libLLVMExecutionEngine.a lib/libLLVMGlobalISel.a lib/libLLVMHexagonAsmParser.a lib/libLLVMHexagonCodeGen.a lib/libLLVMHexagonDesc.a lib/libLLVMHexagonDisassembler.a lib/libLLVMHexagonInfo.a lib/libLLVMInstCombine.a lib/libLLVMInstrumentation.a lib/libLLVMipo.a lib/libLLVMIRReader.a lib/libLLVMLanaiAsmParser.a
-  - ninja lib/libLLVMLanaiCodeGen.a lib/libLLVMLanaiDesc.a lib/libLLVMLanaiDisassembler.a lib/libLLVMLanaiInfo.a lib/libLLVMLanaiInstPrinter.a lib/libLLVMLinker.a lib/libLLVMLTO.a lib/libLLVMMC.a lib/libLLVMMCDisassembler.a lib/libLLVMMCJIT.a 
-  
+  - call %APPVEYOR_BUILD_FOLDER%\build_script.bat
+
 after_build:
-  # Make cache to continue in llvm-builder
-  - find . -name *.obj -o -name *.a -o -name *.inc -o -name *.tmp > tar_file.list
-  - tar zcvf swift_llvm_cache.tar.gz -T tar_file.list include bin/clang-tblgen.exe bin/llvm-tblgen.exe .ninja_deps .ninja_log
-  - mv swift_llvm_cache.tar.gz %APPVEYOR_BUILD_FOLDER%
+  - call %APPVEYOR_BUILD_FOLDER%\after_build.bat
 
 test_script:
   - 'echo skip test'
