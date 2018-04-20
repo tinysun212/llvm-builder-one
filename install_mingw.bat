@@ -18,7 +18,7 @@ rem Install packages
  pacman -S --noconfirm mingw-w64-x86_64-pkg-config
  pacman -S --noconfirm mingw-w64-x86_64-dlfcn
  pacman -S --noconfirm python
- pacman -S --noconfirm python2
+ pacman -S --noconfirm mingw-w64-x86_64-python2
 
 rem Download source
  CD %WORK_DIR%
