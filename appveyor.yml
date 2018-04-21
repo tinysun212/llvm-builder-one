@@ -12,6 +12,7 @@ install:
 #  - call %APPVEYOR_BUILD_FOLDER%\install_%PLATFORM%.bat
   
 build_script:
+  - ECHO dummy build
 #  - call %APPVEYOR_BUILD_FOLDER%\build_script_%PLATFORM%.bat
 
 after_build:
