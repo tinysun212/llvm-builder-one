@@ -2,9 +2,9 @@ version: 1.0.{build}
 
 environment:
   matrix:
+  - PLATFORM: msvc
   - PLATFORM: mingw64
   - PLATFORM: cygwin64
-  - PLATFORM: msvc
 
 install:
   - call %APPVEYOR_BUILD_FOLDER%\install.bat
