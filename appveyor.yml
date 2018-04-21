@@ -16,7 +16,7 @@ build_script:
 #  - call %APPVEYOR_BUILD_FOLDER%\build_script_%PLATFORM%.bat
 
 after_build:
-  - call %APPVEYOR_BUILD_FOLDER%\after_build_%PLATFORM%.bat
+  - call %APPVEYOR_BUILD_FOLDER%\after_build.bat
 
 test_script:
   - 'echo skip test'
