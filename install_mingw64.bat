@@ -6,8 +6,8 @@ rem Set Environment
  SET "PATH_MINGW64=c:\msys64\mingw64\bin;c:\msys64\usr\bin"
  SET PATH=%PATH_MINGW64%;%PATH_ORIGINAL%
  SET WORK_DIR=c:\projects
- SET GIT_TAG_OR_BRANCH=swift-4.0.3+mingw.20180212
- SET TAG_OR_BRANCH_IN_FOLDER=swift-4.0.3-mingw.20180212  
+ SET GIT_TAG_OR_BRANCH=swift-4.1.3+mingw.20181009
+ SET TAG_OR_BRANCH_IN_FOLDER=swift-4.1.3-mingw.20181009  
  CD %WORK_DIR%
 
 rem Install packages
